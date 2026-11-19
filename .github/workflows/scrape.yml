@@ -5,6 +5,9 @@ on:
     - cron: "17 9 * * *"   # todos los dias 06:17 hora Argentina
   workflow_dispatch:        # permite correrlo a mano
 
+permissions:
+  contents: write           # para poder guardar la base en el repo
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -24,8 +27,24 @@ jobs:
           AUDIT_PASS: ${{ secrets.AUDIT_PASS }}
         run: python au_sc.py
 
+      - name: Armar catalogo
+        run: python armar_catalogo.py
+
+      - name: Publicar si hubo cambios
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add catalogo.db.gz catalogo_version.json
+          if git diff --cached --quiet; then
+            echo "Nada para publicar"
+          else
+            git commit -m "Catalogo $(date +%F)"
+            git push
+          fi
+
       - name: Guardar CSVs para revisar
         uses: actions/upload-artifact@v4
         with:
           name: descarga_audit
           path: descarga_audit/
+          retention-days: 7
