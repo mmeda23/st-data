@@ -1,0 +1,174 @@
+# -*- coding: utf-8 -*-
+"""
+Arma catalogo.db.gz + catalogo_version.json a partir de los CSV de descarga_audit/.
+Solo reescribe los archivos si los datos cambiaron.
+"""
+
+import csv
+import gzip
+import hashlib
+import json
+import sqlite3
+import sys
+from datetime import date, datetime
+from pathlib import Path
+
+ORIGEN = Path("descarga_audit")
+DESTINO_DB = Path("catalogo.db.gz")
+DESTINO_VERSION = Path("catalogo_version.json")
+MIN_PROPORCION = 0.9   # si una tabla trae menos del 90% de lo anterior, se aborta
+
+# tabla: (columnas, funcion que arma cada fila)
+ESQUEMA = {
+    "pais": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT",
+    "deporte": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT",
+    "categoria": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, pais_id INTEGER, deporte_id INTEGER",
+    "torneo": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, categoria_id INTEGER",
+    "evento": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, categoria_id INTEGER, fecha TEXT",
+    "senal": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, pais_id INTEGER",
+    "programa": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, senal_id INTEGER",
+    "equipo": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, pais_id INTEGER, deporte_id INTEGER",
+    "etapa": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, deporte_id INTEGER, orden INTEGER",
+    "empresa": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, activo INTEGER",
+    "marca": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, empresa_id INTEGER",
+    "elemento": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, clasificacion TEXT, subtipo TEXT",
+    "medioGrafico": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, tipo TEXT, pais_id INTEGER",
+}
+
+avisos = []
+
+
+def leer(entidad):
+    archivo = ORIGEN / f"{entidad}.csv"
+    if not archivo.exists():
+        print(f"[!] Falta {archivo}. No se publica nada.")
+        sys.exit(1)
+    with open(archivo, encoding="utf-8-sig") as f:
+        return list(csv.DictReader(f))
+
+
+def indice(filas):
+    """nombre -> id, solo para nombres unicos."""
+    vistos = {}
+    for r in filas:
+        vistos.setdefault(r["Nombre"], []).append(int(r["id_interno"]))
+    return {k: v[0] for k, v in vistos.items() if len(v) == 1}
+
+
+def ref(idx, nombre, contexto):
+    if nombre in idx:
+        return idx[nombre]
+    avisos.append(f"{contexto}: no se pudo resolver '{nombre}'")
+    return None
+
+
+def fecha_iso(texto):
+    try:
+        return datetime.strptime(texto, "%d/%m/%Y").date().isoformat()
+    except ValueError:
+        return texto or None
+
+
+def armar_filas():
+    d = {e: leer(e) for e in ESQUEMA}
+    i_pais, i_dep = indice(d["pais"]), indice(d["deporte"])
+    i_cat, i_emp, i_sen = indice(d["categoria"]), indice(d["empresa"]), indice(d["senal"])
+
+    def cat_id(r, ent):
+        if r.get("categoria_id"):
+            return int(r["categoria_id"])
+        return ref(i_cat, r["Categoria"], f"{ent} {r['id_interno']}")
+
+    t = {}
+    t["pais"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"]) for r in d["pais"]]
+    t["deporte"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"]) for r in d["deporte"]]
+    t["categoria"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                       ref(i_pais, r["Pais"], f"categoria {r['id_interno']}"),
+                       ref(i_dep, r["Deporte"], f"categoria {r['id_interno']}"))
+                      for r in d["categoria"]]
+    t["torneo"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"], cat_id(r, "torneo"))
+                   for r in d["torneo"]]
+    t["evento"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"], cat_id(r, "evento"),
+                    fecha_iso(r["Fecha"])) for r in d["evento"]]
+    t["senal"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                   ref(i_pais, r["Pais"], f"senal {r['id_interno']}")) for r in d["senal"]]
+    t["programa"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                      ref(i_sen, r["Senal"], f"programa {r['id_interno']}")) for r in d["programa"]]
+    t["equipo"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                    ref(i_pais, r["Pais"], f"equipo {r['id_interno']}"),
+                    ref(i_dep, r["Deporte"], f"equipo {r['id_interno']}")) for r in d["equipo"]]
+    t["etapa"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                   ref(i_dep, r["Deporte"], f"etapa {r['id_interno']}"),
+                   int(r["Orden"]) if r["Orden"].isdigit() else None) for r in d["etapa"]]
+    t["empresa"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                     1 if r["Activo"] == "True" else 0) for r in d["empresa"]]
+    t["marca"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                   ref(i_emp, r["Empresa"], f"marca {r['id_interno']}")) for r in d["marca"]]
+    t["elemento"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"], r["Clasificacion"],
+                      r["Subtipo"]) for r in d["elemento"]]
+    t["medioGrafico"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"], r["Tipo"],
+                          ref(i_pais, r["Pais"], f"medioGrafico {r['id_interno']}"))
+                         for r in d["medioGrafico"]]
+    for nombre in t:
+        t[nombre].sort(key=lambda fila: fila[0])
+    return t
+
+
+def calcular_hash(tablas):
+    h = hashlib.sha256()
+    for nombre in sorted(tablas):
+        h.update(nombre.encode())
+        h.update(json.dumps(tablas[nombre], ensure_ascii=False).encode("utf-8"))
+    return h.hexdigest()
+
+
+def main():
+    tablas = armar_filas()
+    conteos = {k: len(v) for k, v in tablas.items()}
+    nuevo_hash = calcular_hash(tablas)
+
+    anterior = {}
+    if DESTINO_VERSION.exists():
+        anterior = json.loads(DESTINO_VERSION.read_text(encoding="utf-8"))
+
+    # Seguridad: si una tabla vino mucho mas chica, algo fallo en el scraping
+    for nombre, cant in conteos.items():
+        previo = anterior.get("registros", {}).get(nombre, 0)
+        if previo and cant < previo * MIN_PROPORCION:
+            print(f"[!] {nombre}: {cant} registros contra {previo} anteriores. No se publica.")
+            sys.exit(1)
+
+    for a in avisos:
+        print(f"  aviso: {a}")
+
+    if anterior.get("hash") == nuevo_hash:
+        print("Sin cambios. No se publica nada.")
+        return
+
+    tmp = Path("catalogo.db")
+    tmp.unlink(missing_ok=True)
+    con = sqlite3.connect(tmp)
+    for nombre, columnas in ESQUEMA.items():
+        con.execute(f"CREATE TABLE {nombre} ({columnas})")
+        marcas = ",".join("?" * len(tablas[nombre][0]))
+        con.executemany(f"INSERT INTO {nombre} VALUES ({marcas})", tablas[nombre])
+    con.commit()
+    con.execute("VACUUM")
+    con.close()
+
+    with open(tmp, "rb") as f_in, gzip.GzipFile(DESTINO_DB, "wb", mtime=0) as f_out:
+        f_out.write(f_in.read())
+    tmp.unlink()
+
+    version = {
+        "version": date.today().isoformat(),
+        "hash": nuevo_hash,
+        "registros": conteos,
+    }
+    DESTINO_VERSION.write_text(json.dumps(version, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Publicado: version {version['version']}, {DESTINO_DB.stat().st_size // 1024} KB")
+    print(json.dumps(conteos, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
