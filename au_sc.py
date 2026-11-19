@@ -121,6 +121,55 @@ def scrapear_entidad(session, entidad, outdir):
     return True
 
 
+def resolver_categorias(session, outdir):
+    """Agrega la columna categoria_id a torneo.csv y evento.csv.
+    Si el nombre de la categoria es unico, la resuelve por nombre.
+    Si esta repetido, abre la ficha del registro y lee el link a la categoria."""
+    archivo_cat = outdir / "categoria.csv"
+    if not archivo_cat.exists():
+        print("  [!] Falta categoria.csv, no se resuelven categorias")
+        return
+    with open(archivo_cat, encoding="utf-8-sig") as f:
+        categorias = list(csv.DictReader(f))
+    ids_por_nombre = {}
+    for c in categorias:
+        ids_por_nombre.setdefault(c["Nombre"], []).append(c["id_interno"])
+
+    for entidad in ("torneo", "evento"):
+        archivo = outdir / f"{entidad}.csv"
+        if not archivo.exists():
+            continue
+        with open(archivo, encoding="utf-8-sig") as f:
+            lector = csv.DictReader(f)
+            columnas = lector.fieldnames
+            filas = list(lector)
+        ambiguas = 0
+        sin_resolver = 0
+        for fila in filas:
+            candidatos = ids_por_nombre.get(fila.get("Categoria", ""), [])
+            if len(candidatos) == 1:
+                fila["categoria_id"] = candidatos[0]
+                continue
+            ambiguas += 1
+            fila["categoria_id"] = ""
+            r = session.get(f"{BASE}/{entidad}/show/{fila['id_interno']}", timeout=30)
+            if r.ok:
+                soup = BeautifulSoup(r.text, "html.parser")
+                a = soup.find("a", href=lambda h: h and "/categoria/show/" in h)
+                if a is not None:
+                    fila["categoria_id"] = a["href"].split("?")[0].split(";")[0].rstrip("/").split("/")[-1]
+            if not fila["categoria_id"]:
+                sin_resolver += 1
+            time.sleep(PAUSA_SEG)
+        if "categoria_id" not in columnas:
+            columnas = columnas + ["categoria_id"]
+        with open(archivo, "w", newline="", encoding="utf-8-sig") as f:
+            w = csv.DictWriter(f, fieldnames=columnas)
+            w.writeheader()
+            w.writerows(filas)
+        print(f"  {entidad}: {ambiguas} con categoria ambigua, {sin_resolver} sin resolver")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--entidades", nargs="*", default=ENTIDADES,
@@ -143,6 +192,9 @@ def main():
         except Exception as e:
             print(f"  [!] {ent}: error {e}")
             fallidas.append(ent)
+
+    print("\n== Resolviendo categorias ambiguas ==")
+    resolver_categorias(s, outdir)
 
     print("\n--- Resumen ---")
     print(f"OK: {len(args.entidades) - len(fallidas)} entidades")
