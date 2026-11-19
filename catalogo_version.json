@@ -1,0 +1,19 @@
+{
+  "version": "2026-11-19",
+  "hash": "d42131e9723d03733bcb5a2b4834745d1b340356351ec7039220b5ac39c7a1df",
+  "registros": {
+    "pais": 116,
+    "deporte": 37,
+    "categoria": 500,
+    "torneo": 1414,
+    "evento": 10365,
+    "senal": 210,
+    "programa": 1170,
+    "equipo": 4595,
+    "etapa": 180,
+    "empresa": 325,
+    "marca": 1743,
+    "elemento": 368,
+    "medioGrafico": 177
+  }
+}
