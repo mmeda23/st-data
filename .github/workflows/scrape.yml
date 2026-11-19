@@ -1,0 +1,31 @@
+name: Scrape catalogo
+
+on:
+  schedule:
+    - cron: "17 9 * * *"   # todos los dias 06:17 hora Argentina
+  workflow_dispatch:        # permite correrlo a mano
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install requests beautifulsoup4
+
+      - name: Correr scraper
+        env:
+          AUDIT_USER: ${{ secrets.AUDIT_USER }}
+          AUDIT_PASS: ${{ secrets.AUDIT_PASS }}
+        run: python au_sc.py
+
+      - name: Guardar CSVs para revisar
+        uses: actions/upload-artifact@v4
+        with:
+          name: descarga_audit
+          path: descarga_audit/
