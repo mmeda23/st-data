@@ -1,12 +1,12 @@
 {
   "version": "2026-11-20",
-  "hash": "8513ff548ab5606e836439b0d293788ba1ccde53936f736073794cd17f365b84",
+  "hash": "4b8be88e32e7b3a3a43a1ca330f969e44870d2342af80a84e4b43da03e39200a",
   "registros": {
     "pais": 116,
     "deporte": 37,
     "categoria": 500,
     "torneo": 1414,
-    "evento": 10366,
+    "evento": 10368,
     "senal": 210,
     "programa": 1170,
     "equipo": 4596,
