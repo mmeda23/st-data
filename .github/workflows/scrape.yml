@@ -2,7 +2,7 @@ name: Scrape catalogo
 
 on:
   schedule:
-    - cron: "17 9 * * *"   # todos los dias 06:17 hora Argentina
+    - cron: "17 23 * * *"   # todos los dias 20:17 hora Argentina
   workflow_dispatch:        # permite correrlo a mano
 
 permissions:
