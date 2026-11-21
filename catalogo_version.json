@@ -1,6 +1,6 @@
 {
   "version": "2026-11-21",
-  "hash": "5d4f1aaa697e48a4cd1b580e418eeed0cc5795526f12493d7caf59d9a89c1864",
+  "hash": "f3246b796013a41c7c756afff0b47165632a7124e701483d57ffa386a719cc7a",
   "registros": {
     "pais": 116,
     "deporte": 37,
@@ -17,6 +17,13 @@
     "medioGrafico": 177
   },
   "ocultos": {
-    "evento": 2899
+    "categoria": 1,
+    "torneo": 5,
+    "evento": 2899,
+    "senal": 3,
+    "equipo": 15,
+    "empresa": 1,
+    "marca": 4,
+    "elemento": 59
   }
 }
