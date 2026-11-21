@@ -2,6 +2,11 @@
 """
 Arma catalogo.db.gz + catalogo_version.json a partir de los CSV de descarga_audit/.
 Solo reescribe los archivos si los datos cambiaron.
+
+Ocultos (no se borran: quedan en la base con oculto = 1 y Sport Tracker no los muestra):
+- ocultos.csv          una línea por registro: tabla;codigo;motivo
+- reglas_ocultos.json  reglas generales, ej: {"evento_fecha_antes_de": "2020-01-01"}
+Los dos archivos son opcionales y viven en el repo junto a este script.
 """
 
 import csv
@@ -17,6 +22,8 @@ ORIGEN = Path("descarga_audit")
 DESTINO_DB = Path("catalogo.db.gz")
 DESTINO_VERSION = Path("catalogo_version.json")
 MIN_PROPORCION = 0.9   # si una tabla trae menos del 90% de lo anterior, se aborta
+ARCHIVO_OCULTOS = Path("ocultos.csv")
+ARCHIVO_REGLAS = Path("reglas_ocultos.json")
 
 # tabla: (columnas, funcion que arma cada fila)
 ESQUEMA = {
@@ -114,6 +121,41 @@ def armar_filas():
     return t
 
 
+def cargar_ocultos():
+    """{(tabla, CODIGO)} de ocultos.csv + reglas de reglas_ocultos.json."""
+    marcados = set()
+    if ARCHIVO_OCULTOS.exists():
+        with open(ARCHIVO_OCULTOS, encoding="utf-8-sig") as f:
+            for fila in csv.reader(f, delimiter=";"):
+                if len(fila) >= 2 and fila[0].strip() and fila[0].strip().lower() != "tabla":
+                    marcados.add((fila[0].strip(), fila[1].strip().upper()))
+    reglas = {}
+    if ARCHIVO_REGLAS.exists():
+        reglas = json.loads(ARCHIVO_REGLAS.read_text(encoding="utf-8"))
+    return marcados, reglas
+
+
+def aplicar_ocultos(tablas):
+    """Agrega la columna oculto (0/1) al final de cada fila."""
+    marcados, reglas = cargar_ocultos()
+    antes_de = reglas.get("evento_fecha_antes_de")
+    conteo = {}
+    for nombre, filas in tablas.items():
+        nuevas = []
+        for fila in filas:
+            oculto = (nombre, (fila[2] or "").upper()) in marcados
+            if nombre == "evento" and antes_de and fila[4] and fila[4] < antes_de:
+                oculto = True
+            nuevas.append(fila + (1 if oculto else 0,))
+        tablas[nombre] = nuevas
+        conteo[nombre] = sum(f[-1] for f in nuevas)
+    no_encontrados = {m for m in marcados
+                      if not any((fila[2] or "").upper() == m[1] for fila in tablas.get(m[0], []))}
+    for tabla, codigo in sorted(no_encontrados):
+        avisos.append(f"ocultos.csv: no existe {tabla} {codigo}")
+    return conteo
+
+
 def calcular_hash(tablas):
     h = hashlib.sha256()
     for nombre in sorted(tablas):
@@ -124,6 +166,7 @@ def calcular_hash(tablas):
 
 def main():
     tablas = armar_filas()
+    ocultos = aplicar_ocultos(tablas)
     conteos = {k: len(v) for k, v in tablas.items()}
     nuevo_hash = calcular_hash(tablas)
 
@@ -149,7 +192,7 @@ def main():
     tmp.unlink(missing_ok=True)
     con = sqlite3.connect(tmp)
     for nombre, columnas in ESQUEMA.items():
-        con.execute(f"CREATE TABLE {nombre} ({columnas})")
+        con.execute(f"CREATE TABLE {nombre} ({columnas}, oculto INTEGER DEFAULT 0)")
         marcas = ",".join("?" * len(tablas[nombre][0]))
         con.executemany(f"INSERT INTO {nombre} VALUES ({marcas})", tablas[nombre])
     con.commit()
@@ -164,6 +207,7 @@ def main():
         "version": date.today().isoformat(),
         "hash": nuevo_hash,
         "registros": conteos,
+        "ocultos": {k: v for k, v in ocultos.items() if v},
     }
     DESTINO_VERSION.write_text(json.dumps(version, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Publicado: version {version['version']}, {DESTINO_DB.stat().st_size // 1024} KB")
