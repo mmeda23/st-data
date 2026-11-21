@@ -1,6 +1,6 @@
 {
-  "version": "2026-11-20",
-  "hash": "4b8be88e32e7b3a3a43a1ca330f969e44870d2342af80a84e4b43da03e39200a",
+  "version": "2026-11-21",
+  "hash": "5d4f1aaa697e48a4cd1b580e418eeed0cc5795526f12493d7caf59d9a89c1864",
   "registros": {
     "pais": 116,
     "deporte": 37,
@@ -15,5 +15,8 @@
     "marca": 1743,
     "elemento": 368,
     "medioGrafico": 177
+  },
+  "ocultos": {
+    "evento": 2899
   }
 }
