@@ -1,6 +1,6 @@
 {
-  "version": "2026-11-21",
-  "hash": "f3246b796013a41c7c756afff0b47165632a7124e701483d57ffa386a719cc7a",
+  "version": "2026-11-24",
+  "hash": "24fa5552b9931ec2fd8c8ebe98b60aaad951ee4e15ef148b745cd746a1cf7d2c",
   "registros": {
     "pais": 116,
     "deporte": 37,
@@ -9,7 +9,7 @@
     "evento": 10368,
     "senal": 210,
     "programa": 1170,
-    "equipo": 4596,
+    "equipo": 4597,
     "etapa": 180,
     "empresa": 325,
     "marca": 1743,
