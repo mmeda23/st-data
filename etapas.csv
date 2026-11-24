@@ -1,0 +1,111 @@
+deporte;codigo;mostrar;orden
+Artes Marciales;FTAM;Fuera de Tiempo;1
+Artes Marciales;1AM;1er round;2
+Artes Marciales;2AM;2do round;3
+Artes Marciales;3AM;3er round;4
+Artes Marciales;4AM;4to round;5
+Artes Marciales;5AM;5to round;6
+Automovilismo;AUTCL;Clasificacion;1
+Automovilismo;AUTFN;Final;2
+Automovilismo;PR;Practica;3
+Automovilismo;AUTCLS;Clasif Sprint;4
+Automovilismo;SPF1;Carrera Sprint;5
+Automovilismo;GT2;GT2000;6
+Automovilismo;SF3;F3 - Carrera Sprint;7
+Basquet;FTB;Fuera de Tiempo;1
+Basquet;1CB;1er Cuarto;2
+Basquet;2CB;2do Cuarto;3
+Basquet;ETB;Entre Tiempo;4
+Basquet;3CB;3er Cuarto;5
+Basquet;4CB;4to Cuarto;6
+Basquet;TSB;T. E.;7
+Beisbol;FTBB;Fuera de Tiempo;1
+Beisbol;PCBB;Partido Completo;2
+Boxeo;FTBO;Fuera de Tiempo;1
+Boxeo;1BO;1 Round;2
+Boxeo;2BO;2 Round;3
+Boxeo;3BO;3 Round;4
+Boxeo;4BO;4 Round;5
+Boxeo;5BO;5 Round;6
+Boxeo;6BO;6 Round;7
+Boxeo;7BO;7 Round;8
+Boxeo;8BO;8 Round;9
+Boxeo;9BO;9 Round;10
+Boxeo;10BO;10 Round;11
+Boxeo;11BO;11 Round;12
+Boxeo;12BO;12 Round;13
+Futbol;FT;Fuera de Tiempo;1
+Futbol;PT;Primer Tiempo;2
+Futbol;ET;Entre Tiempo;3
+Futbol;ST;Segundo Tiempo;4
+Futbol;TE;Tiempo Extra;5
+Futbol Americano;FTFA;Fuera de Tiempo;1
+Futbol Americano;1CFA;1er Cuarto;2
+Futbol Americano;2CFA;2do Cuarto;3
+Futbol Americano;ETFA;Entre Tiempo;4
+Futbol Americano;3CFA;3er Cuarto;5
+Futbol Americano;4CFA;4to Cuarto;6
+Futbol Americano;TEFA;Tiempo Extra;7
+Golf;EVE;Evento;1
+Handball;FTHA;Fuera de Tiempo;1
+Handball;PTHA;Primer Tiempo;2
+Handball;ETHA;Entre Tiempo;3
+Handball;STHA;Segundo Tiempo;4
+Handball;TETHA;Tiempo Extra;5
+Hockey;FTHO;Fuera de Tiempo;1
+Hockey;PTHO;Primer Tiempo;2
+Hockey;ETHO;Entre Tiempo;3
+Hockey;STHO;Segundo Tiempo;4
+Hockey;TTHO;Tercer Tiempo;5
+Hockey;CTHO;Cuarto Tiempo;6
+Hockey;TEHO;Tiempo Extra;7
+Maraton;FINMAR;Final;1
+Motociclismo;MOTFN;Final;1
+Motociclismo;MOTFS;Fuera de Serie;2
+Motociclismo;MOTCL;Clasificacion;3
+Motociclismo;MOTS;Sprint;4
+Olimpiadas;FINOL;Final;1
+Padel;FTPA;Fuera de Tiempo;1
+Padel;1SP;1er Set;2
+Padel;2SP;2do Set;3
+Padel;3SP;3er Set;4
+Polo;FTP;Fuera de tiempo;1
+Polo;1P;1C;2
+Polo;2P;2C;3
+Polo;3P;3C;4
+Polo;4P;4C;5
+Polo;5P;5C;6
+Polo;6P;6C;7
+Polo;7P;7C;8
+Polo;8P;8C;9
+Polo;SUPP;Tiempo Extra;10
+Rugby;FTR;Fuera de Tiempo;1
+Rugby;PTR;Primer Tiempo;2
+Rugby;ETR;Entre Tiempo;3
+Rugby;STR;Segundo Tiempo;4
+Taekwondo;FTTAE;Fuera de Tiempo;1
+Taekwondo;ASAL1;1er Asalto;2
+Taekwondo;ASAL2;2do Asalto;3
+Taekwondo;ASAL3;3er Asalto;4
+Tenis;FTT;Fuera de Tiempo;1
+Tenis;1ST;1er set;2
+Tenis;2ST;2do set;3
+Tenis;3ST;3er set;4
+Tenis;4ST;4to set;5
+Tenis;5ST;5to set;6
+Tenis;TBT;Tie Break;7
+Tenis de Mesa;FTTM;Fuera de Tiempo;1
+Tenis de Mesa;1STM;1er set;2
+Tenis de Mesa;2STM;2do Set;3
+Tenis de Mesa;3STM;3er set;4
+Tenis de Mesa;4STM;4to set;5
+Tenis de Mesa;5STM;5to set;6
+Tenis de Mesa;6STM;6to set;7
+Triatlon;FINTRIA;Final;1
+Varios;FN;Final;1
+Volley;FTV;Fuera de Tiempo;1
+Volley;1SV;1er Set;2
+Volley;2SV;2do Set;3
+Volley;3SV;3er Set;4
+Volley;4SV;4to Set;5
+Volley;5SV;5to Set;6

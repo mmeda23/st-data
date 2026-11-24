@@ -1,89 +1,159 @@
-tabla;codigo;motivo
-elemento;A300;
-elemento;A302;
-elemento;A303;
-elemento;A304;
-elemento;A305;
-elemento;A307;
-elemento;A308;
-elemento;A309;
-elemento;A313;
-elemento;A314;
-elemento;A316;
-elemento;A317;
-elemento;A321;
-elemento;A322;
-elemento;A327;
-elemento;A331;
-elemento;A335;
-elemento;A337;
-elemento;A339;
-elemento;A341;
-elemento;A343;
-elemento;A348;
-elemento;A352;
-elemento;A356;
-elemento;A368;
-elemento;A374;
-elemento;A376;
-elemento;A382;
-elemento;A383;
-elemento;A398;
-elemento;A401;
-elemento;A403;
-elemento;A405;
-elemento;A406;
-elemento;A408;
-elemento;A412;
-elemento;A414;
-elemento;BOLAVA;
-elemento;CAMIL;
-elemento;C516;
-elemento;C524;
-elemento;ADNETS;
-elemento;CETS;
-elemento;REJDE;
-elemento;REJIZ;
-elemento;CBCO;
-elemento;DIR;
-elemento;DODE;
-elemento;EDTV;
-elemento;FAR;
-elemento;VIEJAS;
-elemento;M09;
-elemento;M141;
-elemento;M182;
-elemento;M55;
-elemento;M64;
-elemento;M73;
-elemento;PERIOD;
-elemento;TANQUE;
-empresa;PIL;
-marca;AFABETW;
-marca;TOGOBSANL;
-marca;TOCOTCOF;
-marca;TTAXN;
-equipo;GIACOPONI;
-equipo;MKD;
-equipo;ERIC;
-equipo;MOSCAR;
-equipo;ECHA;
-equipo;REV;
-equipo;CEBA;
-equipo;ARGV;
-equipo;CIU;
-equipo;DECUC;
-equipo;AGRI;
-equipo;ANIQES;
-equipo;MO;
-equipo;PTAMX;
-equipo;DEPM;
-torneo;CLFEM;
-torneo;SLAGCO;
-torneo;LPROSA;
-torneo;LRPOSA;
-torneo;TCMX;
-categoria;FSCH;
-senal;GLBR;
-senal;TLV;
-senal;CMDEP;
+tabla;codigo;nombre;motivo
+elemento;A300;Auto 300;
+elemento;A302;Auto 302;
+elemento;A303;Auto 303;
+elemento;A304;Auto 304;
+elemento;A305;Auto 305;
+elemento;A307;Auto 307;
+elemento;A308;Auto 308;
+elemento;A309;Auto 309;
+elemento;A313;Auto 313;
+elemento;A314;Auto 314;
+elemento;A316;Auto 316;
+elemento;A317;Auto 317;
+elemento;A321;Auto 321;
+elemento;A322;Auto 322;
+elemento;A327;Auto 327;
+elemento;A331;Auto 331;
+elemento;A335;Auto 335;
+elemento;A337;Auto 337;
+elemento;A339;Auto 339;
+elemento;A341;Auto 341;
+elemento;A343;Auto 343;
+elemento;A348;Auto 348;
+elemento;A352;Auto 352;
+elemento;A356;Auto 356;
+elemento;A368;Auto 368;
+elemento;A374;Auto 374;
+elemento;A376;Auto 376;
+elemento;A382;Auto 382;
+elemento;A383;Auto 383;
+elemento;A398;Auto 398;
+elemento;A401;Auto 401;
+elemento;A403;Auto 403;
+elemento;A405;Auto 405;
+elemento;A406;Auto 406;
+elemento;A408;Auto 408;
+elemento;A412;Auto 412;
+elemento;A414;Auto 414;
+elemento;BOLAVA;Botella/Lata/Vaso;
+elemento;CAMIL;Camilla;
+elemento;C516;Camion 516;
+elemento;C524;Camion 524;
+elemento;ADNETS;Cartel Campo Transparente;
+elemento;CETS;Cartel Estadio Tribuna Sur;
+elemento;REJDE;Cartel Reja Derecha;
+elemento;REJIZ;Cartel Reja Izq;
+elemento;CBCO;Cartel bco;
+elemento;DIR;Dirigente;
+elemento;DODE;Dorsal deportivo;
+elemento;EDTV;Estadio DTV;
+elemento;FAR;Fuerza Aerea Argentina;
+elemento;VIEJAS;Imagenes Viejas;
+elemento;M09;Moto 09;
+elemento;M141;Moto 141;
+elemento;M182;Moto 182;
+elemento;M55;Moto 55;
+elemento;M64;Moto 64;
+elemento;M73;Moto 73;
+elemento;PERIOD;No usar Periodista;
+elemento;TANQUE;Tanque;
+empresa;PIL;NOPilsener;
+marca;AFABETW;NO USARBet Warrior AFA;
+marca;TOGOBSANL;No usar Sanluis;
+marca;TOCOTCOF;zzzCotti Coffe (T);
+marca;TTAXN;NO USAR Axion (TT);
+equipo;GIACOPONI;1111111Emiliano Giacoponi;
+equipo;MKD;NO Markel Damian;
+equipo;ERIC;NOESESTEEric Jean;
+equipo;MOSCAR;no Moscardini nicolas;
+equipo;ECHA;NO USAR Echagüe;
+equipo;REV;1111111J.C.Reveco;
+equipo;CEBA;NOCeballos, Horacio;
+equipo;ARGV;NOArgentina;
+equipo;CIU;NOUSARCiudad;
+equipo;DECUC;NO USAR D. Cucuta (CO);
+equipo;AGRI;NORionegro Aguilas (CO);
+equipo;ANIQES;NOAniquiladores (ES);
+equipo;MO;NO USAR Morelia;
+equipo;PTAMX;NOUSARPumas Tabasco (MX);
+equipo;DEPM;no usar;
+torneo;CLFEM;NO USARCopa Libertadores FEM;
+torneo;SLAGCO;NOSuperliga Aguila (CO);
+torneo;LPROSA;NOLiga Pro Seria A;
+torneo;LRPOSA;NOLigaPro Serie A (EC);
+torneo;TCMX;NO USAR Torneo Clausura (MX);
+categoria;FSCH;NO-Futbol Seleccion (CHI);
+senal;GLBR;Globo (BR) No usar;
+senal;TLV;NO Televisa (MX);
+senal;CMDEP;Cable Mágico Deportes (ahora mov dep);
+etapa;AUTS1;Primera Serie (Automovilismo);no se usa
+etapa;S2;Segunda serie (Automovilismo);no se usa
+etapa;S3;Tercera serie (Automovilismo);no se usa
+etapa;S8;Super 8 (Automovilismo);no se usa
+etapa;FR;Formula Renault (Automovilismo);no se usa
+etapa;FPA;Fiat Punto Abarth (Automovilismo);no se usa
+etapa;MCH;Mini Challenge (Automovilismo);no se usa
+etapa;T4;Turismo 4000 (Automovilismo);no se usa
+etapa;FM;Formula Metropolitana (Automovilismo);no se usa
+etapa;TCP;Turismo Carretera Pista (Automovilismo);no se usa
+etapa;TCPM;Turismo Carretera Pista Mouras (Automovilismo);no se usa
+etapa;TNC2;Turismo Nacional Clase2 (Automovilismo);no se usa
+etapa;FS;Fuera de Serie (Automovilismo);no se usa
+etapa;TPC2;Turismo Pista Clase2 (Automovilismo);no se usa
+etapa;TPC3;Turismo Pista Clase3 (Automovilismo);no se usa
+etapa;MBPR;MBenz Premium Race (Automovilismo);no se usa
+etapa;FI2;Final 2 (Automovilismo);no se usa
+etapa;MMGOL;Monomarca Gol (Automovilismo);no se usa
+etapa;EMS;EMS Racing (Automovilismo);no se usa
+etapa;BORA;Copa BORA (Automovilismo);no se usa
+etapa;TLLE;Tanques llenos (Automovilismo);no se usa
+etapa;TCPK;TC Pick UP (Automovilismo);no se usa
+etapa;TRS;Top Race Series (Automovilismo);no se usa
+etapa;FRP;Formula Renault Plus (Automovilismo);no se usa
+etapa;SPRINT;TC2000 Spint (Automovilismo);no se usa
+etapa;MNFIAT;Monomarca Fiat (Automovilismo);no se usa
+etapa;TCN;Turismo carretera neuquino (Automovilismo);no se usa
+etapa;FICOM;Fiat Competizione (Automovilismo);no se usa
+etapa;RARG;Rally Argentino (Automovilismo);no se usa
+etapa;TPC1;Turismo Pista Clase 1 (Automovilismo);no se usa
+etapa;F4;Formula 4000 (Automovilismo);no se usa
+etapa;TCRIO;TC RioPlatense (Automovilismo);no se usa
+etapa;EF1;Exhibicion F1 (Automovilismo);no se usa
+etapa;COPO;Copa Porsche GT3 (Automovilismo);no se usa
+etapa;TCPLA;TC Platense (Automovilismo);no se usa
+etapa;ST2S;Super TC200 Sprint (Automovilismo);no se usa
+etapa;F4NG;Formula 4 NG (Automovilismo);no se usa
+etapa;ASM;Asociacion Standard Mejorado (Automovilismo);no se usa
+etapa;DDA;Desafío de Aceleracion (Automovilismo);no se usa
+etapa;SETC;Sorteo de las Estrellas (TC) (Automovilismo);no se usa
+etapa;SPCH;Sprint Challenge (Automovilismo);no se usa
+etapa;STRV6;Sprint Top Race (Automovilismo);no se usa
+etapa;SPTR;Sprint Trophy (Automovilismo);no se usa
+etapa;TCRA;TC Regional Clase A (Automovilismo);no se usa
+etapa;TRGTB;TC Regional GTB (Automovilismo);no se usa
+etapa;TRJ;Top Race Junior (Automovilismo);no se usa
+etapa;TCPL;Turismo Carretera Platense (Automovilismo);no se usa
+etapa;TZP;Turismo Zonal Pista (Automovilismo);no se usa
+etapa;FTBH;F.T (Beach Handball);no se usa
+etapa;FICIC;Final (Ciclismo);no se usa
+etapa;EEQ;Evento (Equitacion);no se usa
+etapa;TT;3 T (Futbol);no se usa
+etapa;FTGA;FT (Gimnasia Artistica);no se usa
+etapa;FTHSP;F.T. (Hockey SP);no se usa
+etapa;PTHSP;P.T. (Hockey SP);no se usa
+etapa;ETHSP;E.T. (Hockey SP);no se usa
+etapa;STHSP;S.T. (Hockey SP);no se usa
+etapa;TEHSP;T.E. (Hockey SP);no se usa
+etapa;FTPAT;F.T. (Pato);no se usa
+etapa;1TPAT;1T (Pato);no se usa
+etapa;2TPAT;2T (Pato);no se usa
+etapa;3TPAT;3T (Pato);no se usa
+etapa;4TPAT;4T (Pato);no se usa
+etapa;5TPAT;5T (Pato);no se usa
+etapa;6TPAT;6T (Pato);no se usa
+etapa;ETP;ET (Polo);no se usa
+etapa;ACARX;ACARX (Rally);no se usa
+etapa;PCSB;Partido Completo (Softbol);no se usa
+etapa;FTVA;F.T (Varios);no se usa
+etapa;PART;Partido (Varios);no se usa

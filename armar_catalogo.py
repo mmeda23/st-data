@@ -6,7 +6,11 @@ Solo reescribe los archivos si los datos cambiaron.
 Ocultos (no se borran: quedan en la base con oculto = 1 y Sport Tracker no los muestra):
 - ocultos.csv          una línea por registro: tabla;codigo;motivo
 - reglas_ocultos.json  reglas generales, ej: {"evento_fecha_antes_de": "2020-01-01"}
-Los dos archivos son opcionales y viven en el repo junto a este script.
+Etapas:
+- etapas.csv           deporte;codigo;mostrar;orden — nombre que muestra Sport Tracker y
+                       orden del ciclo. Las etapas que no figuran (ej: nuevas) se muestran
+                       con su nombre de la base, después de las listadas.
+Los archivos son opcionales y viven en el repo junto a este script.
 """
 
 import csv
@@ -24,6 +28,7 @@ DESTINO_VERSION = Path("catalogo_version.json")
 MIN_PROPORCION = 0.9   # si una tabla trae menos del 90% de lo anterior, se aborta
 ARCHIVO_OCULTOS = Path("ocultos.csv")
 ARCHIVO_REGLAS = Path("reglas_ocultos.json")
+ARCHIVO_ETAPAS = Path("etapas.csv")
 
 # tabla: (columnas, funcion que arma cada fila)
 ESQUEMA = {
@@ -35,7 +40,7 @@ ESQUEMA = {
     "senal": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, pais_id INTEGER",
     "programa": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, senal_id INTEGER",
     "equipo": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, pais_id INTEGER, deporte_id INTEGER",
-    "etapa": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, deporte_id INTEGER, orden INTEGER",
+    "etapa": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, deporte_id INTEGER, orden INTEGER, mostrar TEXT",
     "empresa": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, activo INTEGER",
     "marca": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, empresa_id INTEGER",
     "elemento": "id INTEGER PRIMARY KEY, nombre TEXT, codigo TEXT, clasificacion TEXT, subtipo TEXT",
@@ -104,9 +109,17 @@ def armar_filas():
     t["equipo"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
                     ref(i_pais, r["Pais"], f"equipo {r['id_interno']}"),
                     ref(i_dep, r["Deporte"], f"equipo {r['id_interno']}")) for r in d["equipo"]]
-    t["etapa"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
-                   ref(i_dep, r["Deporte"], f"etapa {r['id_interno']}"),
-                   int(r["Orden"]) if r["Orden"].isdigit() else None) for r in d["etapa"]]
+    etapas_cfg = cargar_etapas()
+
+    def etapa(r):
+        cfg = etapas_cfg.get((r["Codigo"] or "").upper())
+        orden_base = int(r["Orden"]) if r["Orden"].isdigit() else 0
+        orden = cfg[1] if cfg else 1000 + orden_base   # las no listadas van al final
+        return (int(r["id_interno"]), r["Nombre"], r["Codigo"],
+                ref(i_dep, r["Deporte"], f"etapa {r['id_interno']}"),
+                orden, cfg[0] if cfg else None)
+
+    t["etapa"] = [etapa(r) for r in d["etapa"]]
     t["empresa"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
                      1 if r["Activo"] == "True" else 0) for r in d["empresa"]]
     t["marca"] = [(int(r["id_interno"]), r["Nombre"], r["Codigo"],
@@ -119,6 +132,21 @@ def armar_filas():
     for nombre in t:
         t[nombre].sort(key=lambda fila: fila[0])
     return t
+
+
+def cargar_etapas():
+    """{CODIGO: (nombre_a_mostrar, orden)} de etapas.csv."""
+    cfg = {}
+    if not ARCHIVO_ETAPAS.exists():
+        return cfg
+    with open(ARCHIVO_ETAPAS, encoding="utf-8-sig", newline="") as f:
+        for r in csv.DictReader(f, delimiter=";"):
+            codigo = (r.get("codigo") or "").strip().upper()
+            if codigo:
+                orden = (r.get("orden") or "").strip()
+                cfg[codigo] = ((r.get("mostrar") or "").strip() or None,
+                               int(orden) if orden.isdigit() else 999)
+    return cfg
 
 
 def cargar_ocultos():
