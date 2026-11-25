@@ -1,18 +1,18 @@
 {
-  "version": "2026-11-24",
-  "hash": "9b918e13362ce07bead0bb7a94cf9a3a90a9f3b318716f736526374f0aed92b7",
+  "version": "2026-11-25",
+  "hash": "6227d1d3ed1d108d17eadc4751f9b68b4eb113fd686f8c9c81404f60bdeb6e8c",
   "registros": {
     "pais": 116,
     "deporte": 37,
     "categoria": 500,
     "torneo": 1414,
-    "evento": 10373,
+    "evento": 10374,
     "senal": 210,
     "programa": 1170,
     "equipo": 4597,
     "etapa": 180,
     "empresa": 325,
-    "marca": 1743,
+    "marca": 1744,
     "elemento": 368,
     "medioGrafico": 177
   },
