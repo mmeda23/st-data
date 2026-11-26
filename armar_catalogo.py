@@ -1,18 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Arma catalogo.db.gz + catalogo_version.json a partir de los CSV de descarga_audit/.
-Solo reescribe los archivos si los datos cambiaron.
-
-Ocultos (no se borran: quedan en la base con oculto = 1 y Sport Tracker no los muestra):
-- ocultos.csv          una línea por registro: tabla;codigo;motivo
-- reglas_ocultos.json  reglas generales, ej: {"evento_fecha_antes_de": "2020-01-01"}
-Etapas:
-- etapas.csv           deporte;codigo;mostrar;orden — nombre que muestra Sport Tracker y
-                       orden del ciclo. Las etapas que no figuran (ej: nuevas) se muestran
-                       con su nombre de la base, después de las listadas.
-Los archivos son opcionales y viven en el repo junto a este script.
-"""
-
 import csv
 import gzip
 import hashlib
